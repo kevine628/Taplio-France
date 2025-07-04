@@ -1,170 +1,188 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
-import { signOut, useSession } from "next-auth/react"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { BarChart3, Calendar, Users, Settings, LogOut, Menu, Home, Zap, CreditCard, Bell } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { 
+  LayoutDashboard, 
+  BarChart3, 
+  Calendar, 
+  Users, 
+  Settings, 
+  Zap,
+  Menu,
+  X,
+  LogOut,
+  User
+} from "lucide-react"
 
 const navigation = [
-  { name: "Tableau de bord", href: "/dashboard", icon: Home },
-  { name: "Générateur", href: "/dashboard/generator", icon: Zap },
-  { name: "Calendrier", href: "/dashboard/calendar", icon: Calendar },
-  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { name: "CRM", href: "/dashboard/crm", icon: Users },
-  { name: "Paramètres", href: "/dashboard/settings", icon: Settings },
+  {
+    name: "Tableau de bord",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    description: "Vue d'ensemble"
+  },
+  {
+    name: "Générateur IA",
+    href: "/dashboard/generator",
+    icon: Zap,
+    description: "Créer du contenu"
+  },
+  {
+    name: "Calendrier",
+    href: "/dashboard/calendar",
+    icon: Calendar,
+    description: "Planifier les posts"
+  },
+  {
+    name: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
+    description: "Analyser les performances"
+  },
+  {
+    name: "CRM",
+    href: "/dashboard/crm",
+    icon: Users,
+    description: "Gérer les contacts"
+  },
+  {
+    name: "Paramètres",
+    href: "/dashboard/settings",
+    icon: Settings,
+    description: "Configuration"
+  }
 ]
 
-interface DashboardLayoutProps {
-  children: React.ReactNode
-}
-
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
-  const { data: session } = useSession()
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" })
+    // Redirection simple pour l'instant
+    window.location.href = "/"
   }
-
-  const Sidebar = ({ mobile = false }: { mobile?: boolean }) => (
-    <div className={cn("flex flex-col h-full", mobile ? "w-full" : "w-64")}>
-      <div className="flex items-center space-x-2 p-6 border-b">
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-sm">TF</span>
-        </div>
-        <span className="text-xl font-bold text-gray-900">Taplio France</span>
-      </div>
-
-      <nav className="flex-1 p-4 space-y-2">
-        {navigation.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
-              )}
-              onClick={() => mobile && setSidebarOpen(false)}
-            >
-              <item.icon className="h-5 w-5" />
-              <span>{item.name}</span>
-            </Link>
-          )
-        })}
-      </nav>
-
-      <div className="p-4 border-t">
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
-          <h3 className="font-medium text-sm text-gray-900 mb-1">Plan Pro</h3>
-          <p className="text-xs text-gray-600 mb-3">23/50 publications utilisées</p>
-          <Button size="sm" variant="outline" className="w-full bg-transparent">
-            <CreditCard className="h-4 w-4 mr-2" />
-            Gérer l'abonnement
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="p-0">
-          <Sidebar mobile />
-        </SheetContent>
-      </Sheet>
-
-      <div className="flex">
-        {/* Desktop sidebar */}
-        <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:z-50 lg:bg-white lg:border-r">
-          <Sidebar />
-        </div>
-
-        {/* Main content */}
-        <div className="lg:pl-64 flex-1">
-          {/* Header */}
-          <header className="bg-white border-b sticky top-0 z-40">
-            <div className="flex items-center justify-between px-4 py-4 lg:px-8">
-              <div className="flex items-center">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" size="sm" className="lg:hidden">
-                      <Menu className="h-5 w-5" />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="p-0">
-                    <Sidebar mobile />
-                  </SheetContent>
-                </Sheet>
+      <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white">
+          <div className="flex h-16 items-center justify-between px-4 border-b">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">TF</span>
               </div>
-
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm">
-                  <Bell className="h-5 w-5" />
-                </Button>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt="Avatar" />
-                        <AvatarFallback>
-                          {session?.user?.name?.split(" ").map(n => n[0]).join("") || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{session?.user?.name || "Utilisateur"}</p>
-                        <p className="text-xs leading-none text-muted-foreground">{session?.user?.email}</p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Paramètres</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      <span>Facturation</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Déconnexion</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <span className="text-xl font-bold">Taplio France</span>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <nav className="flex-1 px-4 py-6 space-y-2">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link key={item.name} href={item.href}>
+                  <div className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+                    isActive 
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                    <item.icon className="h-5 w-5" />
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-xs text-gray-500">{item.description}</div>
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </nav>
+          <div className="border-t p-4">
+            <div className="flex items-center space-x-3 px-3 py-2">
+              <User className="h-5 w-5 text-gray-500" />
+              <div>
+                <div className="font-medium">Marie Dupont</div>
+                <div className="text-xs text-gray-500">marie@example.com</div>
               </div>
             </div>
-          </header>
-
-          {/* Page Content */}
-          <main className="p-4 lg:p-8">{children}</main>
+            <Button variant="ghost" className="w-full mt-2 justify-start" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
         </div>
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+        <div className="flex flex-col flex-grow bg-white border-r">
+          <div className="flex h-16 items-center px-4 border-b">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">TF</span>
+              </div>
+              <span className="text-xl font-bold">Taplio France</span>
+            </div>
+          </div>
+          <nav className="flex-1 px-4 py-6 space-y-2">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link key={item.name} href={item.href}>
+                  <div className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+                    isActive 
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                    <item.icon className="h-5 w-5" />
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-xs text-gray-500">{item.description}</div>
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </nav>
+          <div className="border-t p-4">
+            <div className="flex items-center space-x-3 px-3 py-2">
+              <User className="h-5 w-5 text-gray-500" />
+              <div>
+                <div className="font-medium">Marie Dupont</div>
+                <div className="text-xs text-gray-500">marie@example.com</div>
+              </div>
+            </div>
+            <Button variant="ghost" className="w-full mt-2 justify-start" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className="lg:pl-64">
+        {/* Mobile header */}
+        <div className="sticky top-0 z-40 flex h-16 items-center gap-x-4 border-b bg-white px-4 shadow-sm lg:hidden">
+          <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
+            {navigation.find(item => item.href === pathname)?.name || "Dashboard"}
+          </div>
+        </div>
+
+        {/* Page content */}
+        <main className="py-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )

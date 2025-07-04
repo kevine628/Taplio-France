@@ -5,194 +5,306 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Switch } from "@/components/ui/switch"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { User, Bell, Shield, Save, Upload } from "lucide-react"
+import { 
+  User, 
+  Bell, 
+  Shield, 
+  CreditCard, 
+  Globe, 
+  Palette,
+  Save,
+  Trash2,
+  Download,
+  Upload
+} from "lucide-react"
+import { DashboardLayout } from "@/components/dashboard-layout"
 
 export default function SettingsPage() {
-  const [profile, setProfile] = useState({
-    firstName: "Jean",
-    lastName: "Dupont",
-    email: "jean.dupont@entreprise.com",
-    company: "Mon Entreprise",
-    position: "Consultant RH"
-  })
-
   const [notifications, setNotifications] = useState({
-    emailNotifications: true,
-    pushNotifications: true,
-    weeklyReport: true,
-    marketingEmails: false
+    email: true,
+    push: false,
+    weekly: true,
+    mentions: true,
   })
 
-  const [linkedinConnected, setLinkedinConnected] = useState(true)
+  const [profile, setProfile] = useState({
+    name: "Marie Dupont",
+    email: "marie@example.com",
+    company: "Taplio France",
+    position: "Consultante RH",
+    timezone: "Europe/Paris",
+    language: "fr",
+  })
 
-  const handleProfileSave = () => {
+  const handleSave = () => {
     // Simulation de sauvegarde
-    console.log("Profil sauvegardé:", profile)
-  }
-
-  const handleNotificationsSave = () => {
-    // Simulation de sauvegarde
-    console.log("Notifications sauvegardées:", notifications)
+    console.log("Paramètres sauvegardés")
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Paramètres</h1>
-        <p className="text-gray-600 mt-1">Gérez votre compte et vos préférences</p>
-      </div>
+    <DashboardLayout>
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Paramètres</h1>
+            <p className="text-gray-600 mt-1">Gérez votre compte et vos préférences</p>
+          </div>
+          <div className="flex items-center space-x-3 mt-4 sm:mt-0">
+            <Button variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Exporter les données
+            </Button>
+            <Button onClick={handleSave} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Save className="h-4 w-4 mr-2" />
+              Sauvegarder
+            </Button>
+          </div>
+        </div>
 
-      <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile">Profil</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="billing">Facturation</TabsTrigger>
-          <TabsTrigger value="integrations">Intégrations</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <User className="h-5 w-5 mr-2" />
-                Informations personnelles
-              </CardTitle>
-              <CardDescription>
-                Mettez à jour vos informations de profil
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src="/placeholder.svg?height=80&width=80" alt="Avatar" />
-                  <AvatarFallback className="text-lg">
-                    {profile.firstName[0]}{profile.lastName[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <Button variant="outline" size="sm">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Changer la photo
-                  </Button>
-                  <p className="text-xs text-gray-500 mt-1">
-                    JPG, PNG ou GIF. Max 2MB.
-                  </p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Settings */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Profile Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <User className="h-5 w-5 mr-2" />
+                  Profil
+                </CardTitle>
+                <CardDescription>Informations de votre compte</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Nom complet</Label>
+                    <Input
+                      id="name"
+                      value={profile.name}
+                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">Prénom</Label>
-                  <Input
-                    id="firstName"
-                    value={profile.firstName}
-                    onChange={(e) => setProfile(prev => ({ ...prev, firstName: e.target.value }))}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="company">Entreprise</Label>
+                    <Input
+                      id="company"
+                      value={profile.company}
+                      onChange={(e) => setProfile({ ...profile, company: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="position">Poste</Label>
+                    <Input
+                      id="position"
+                      value={profile.position}
+                      onChange={(e) => setProfile({ ...profile, position: e.target.value })}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Nom</Label>
-                  <Input
-                    id="lastName"
-                    value={profile.lastName}
-                    onChange={(e) => setProfile(prev => ({ ...prev, lastName: e.target.value }))}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="timezone">Fuseau horaire</Label>
+                    <Select value={profile.timezone} onValueChange={(value) => setProfile({ ...profile, timezone: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Europe/Paris">Europe/Paris</SelectItem>
+                        <SelectItem value="Europe/London">Europe/London</SelectItem>
+                        <SelectItem value="America/New_York">America/New_York</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="language">Langue</Label>
+                    <Select value={profile.language} onValueChange={(value) => setProfile({ ...profile, language: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="fr">Français</SelectItem>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="es">Español</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={profile.email}
-                  onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="company">Entreprise</Label>
-                <Input
-                  id="company"
-                  value={profile.company}
-                  onChange={(e) => setProfile(prev => ({ ...prev, company: e.target.value }))}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="position">Poste</Label>
-                <Input
-                  id="position"
-                  value={profile.position}
-                  onChange={(e) => setProfile(prev => ({ ...prev, position: e.target.value }))}
-                />
-              </div>
-
-              <Button onClick={handleProfileSave} className="w-full sm:w-auto">
-                <Save className="h-4 w-4 mr-2" />
-                Sauvegarder les modifications
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Shield className="h-5 w-5 mr-2" />
-                Sécurité
-              </CardTitle>
-              <CardDescription>
-                Gérez la sécurité de votre compte
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Mot de passe</p>
-                  <p className="text-sm text-gray-500">Dernière modification il y a 3 mois</p>
-                </div>
-                <Button variant="outline">Modifier</Button>
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Authentification à deux facteurs</p>
-                  <p className="text-sm text-gray-500">Sécurisez votre compte avec 2FA</p>
-                </div>
-                <Button variant="outline">Configurer</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="notifications" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Bell className="h-5 w-5 mr-2" />
-                Préférences de notification
-              </CardTitle>
-              <CardDescription>
-                Choisissez comment vous souhaitez être notifié
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
+            {/* Notifications */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Bell className="h-5 w-5 mr-2" />
+                  Notifications
+                </CardTitle>
+                <CardDescription>Gérez vos préférences de notifications</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  {/* Ajoute ici les contrôles de notification */}
+                  <div className="space-y-0.5">
+                    <Label>Notifications par email</Label>
+                    <p className="text-sm text-gray-500">Recevoir les notifications par email</p>
+                  </div>
+                  <Switch
+                    checked={notifications.email}
+                    onCheckedChange={(checked) => setNotifications({ ...notifications, email: checked })}
+                  />
                 </div>
-              </div>
-              <Button onClick={handleNotificationsSave} className="w-full sm:w-auto">
-                <Save className="h-4 w-4 mr-2" />
-                Sauvegarder les notifications
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Notifications push</Label>
+                    <p className="text-sm text-gray-500">Recevoir les notifications sur votre navigateur</p>
+                  </div>
+                  <Switch
+                    checked={notifications.push}
+                    onCheckedChange={(checked) => setNotifications({ ...notifications, push: checked })}
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Rapport hebdomadaire</Label>
+                    <p className="text-sm text-gray-500">Recevoir un résumé de vos performances</p>
+                  </div>
+                  <Switch
+                    checked={notifications.weekly}
+                    onCheckedChange={(checked) => setNotifications({ ...notifications, weekly: checked })}
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Mentions et commentaires</Label>
+                    <p className="text-sm text-gray-500">Être notifié des interactions</p>
+                  </div>
+                  <Switch
+                    checked={notifications.mentions}
+                    onCheckedChange={(checked) => setNotifications({ ...notifications, mentions: checked })}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Appearance */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Palette className="h-5 w-5 mr-2" />
+                  Apparence
+                </CardTitle>
+                <CardDescription>Personnalisez l'interface</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Mode sombre</Label>
+                    <p className="text-sm text-gray-500">Activer le thème sombre</p>
+                  </div>
+                  <Switch />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label>Animations</Label>
+                    <p className="text-sm text-gray-500">Activer les animations de l'interface</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Account Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Statut du compte</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Plan actuel</span>
+                  <Badge className="bg-blue-100 text-blue-800">Pro</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Publications restantes</span>
+                  <span className="font-medium">27/50</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Prochaine facturation</span>
+                  <span className="font-medium">15 Déc 2024</span>
+                </div>
+                <Button variant="outline" className="w-full">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Gérer l'abonnement
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Security */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Shield className="h-5 w-5 mr-2" />
+                  Sécurité
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button variant="outline" className="w-full">
+                  Changer le mot de passe
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Activer l'authentification à deux facteurs
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <Globe className="h-4 w-4 mr-2" />
+                  Sessions actives
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Data Management */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Gestion des données</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button variant="outline" className="w-full">
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter mes données
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Importer des données
+                </Button>
+                <Separator />
+                <Button variant="outline" className="w-full text-red-600 hover:text-red-700">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Supprimer mon compte
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
   )
 }

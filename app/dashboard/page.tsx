@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Calendar, MessageSquare, Users, TrendingUp, Eye, Heart, Plus, Clock, CheckCircle2 } from "lucide-react"
+import { DashboardLayout } from "@/components/dashboard-layout"
+
 const recentPosts = [
   {
     id: 1,
@@ -33,6 +35,7 @@ export default function DashboardPage() {
   const [timeRange, setTimeRange] = useState("7d")
 
   return (
+    <DashboardLayout>
       <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -197,5 +200,6 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+    </DashboardLayout>
   )
 }
