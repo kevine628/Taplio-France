@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { 
   LayoutDashboard, 
@@ -59,10 +59,11 @@ const navigation = [
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
 
   const handleSignOut = () => {
-    // Redirection simple pour l'instant
-    window.location.href = "/"
+    // TODO: Implémenter la déconnexion avec NextAuth
+    router.push("/")
   }
 
   return (
@@ -78,7 +79,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </div>
               <span className="text-xl font-bold">Taplio France</span>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)}>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setSidebarOpen(false)}
+              aria-label="Fermer le menu"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -110,7 +116,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <div className="text-xs text-gray-500">marie@example.com</div>
               </div>
             </div>
-            <Button variant="ghost" className="w-full mt-2 justify-start" onClick={handleSignOut}>
+            <Button 
+              variant="ghost" 
+              className="w-full mt-2 justify-start" 
+              onClick={handleSignOut}
+              aria-label="Se déconnecter"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               Déconnexion
             </Button>
@@ -157,7 +168,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <div className="text-xs text-gray-500">marie@example.com</div>
               </div>
             </div>
-            <Button variant="ghost" className="w-full mt-2 justify-start" onClick={handleSignOut}>
+            <Button 
+              variant="ghost" 
+              className="w-full mt-2 justify-start" 
+              onClick={handleSignOut}
+              aria-label="Se déconnecter"
+            >
               <LogOut className="h-4 w-4 mr-2" />
               Déconnexion
             </Button>
@@ -169,7 +185,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div className="lg:pl-64">
         {/* Mobile header */}
         <div className="sticky top-0 z-40 flex h-16 items-center gap-x-4 border-b bg-white px-4 shadow-sm lg:hidden">
-          <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(true)}>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Ouvrir le menu"
+          >
             <Menu className="h-5 w-5" />
           </Button>
           <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
