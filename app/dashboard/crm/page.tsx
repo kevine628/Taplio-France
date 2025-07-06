@@ -19,7 +19,7 @@ import {
   Star,
   MoreHorizontal,
 } from "lucide-react"
-import { DashboardLayout } from "@/components/dashboard-layout"
+import DashboardLayout from "@/components/dashboard-layout"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const contacts = [

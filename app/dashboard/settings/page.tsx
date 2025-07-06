@@ -21,7 +21,7 @@ import {
   Download,
   Upload
 } from "lucide-react"
-import { DashboardLayout } from "@/components/dashboard-layout"
+import DashboardLayout from "@/components/dashboard-layout"
 
 export default function SettingsPage() {
   const [notifications, setNotifications] = useState({

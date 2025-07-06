@@ -56,7 +56,7 @@ const navigation = [
   }
 ]
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -208,3 +208,5 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     </div>
   )
 }
+
+export default DashboardLayout
